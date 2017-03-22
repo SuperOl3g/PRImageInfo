@@ -26,7 +26,7 @@ module.exports = {
         ]
     },
     plugins: [
-        new CopyWebpackPlugin([{ from: `${srcDir}/manifest.json`, to: distDir }])
-        // new webpack.optimize.UglifyJsPlugin({comments: false})
+        new CopyWebpackPlugin([{ from: `${srcDir}/manifest.json`, to: distDir }]),
+        new webpack.optimize.UglifyJsPlugin({comments: false})
     ]
 };
