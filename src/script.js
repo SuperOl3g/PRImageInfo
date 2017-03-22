@@ -1,5 +1,6 @@
 import { filesize } from 'filesize';
 import { throttle } from 'lodash';
+import { Promise } from 'bluebird';
 
 const SIZE_ELEM_CLASSNAME = 'snippet__pic-size';
 

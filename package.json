@@ -9,6 +9,7 @@
   "author": "SuperOl3g <oleglykasov@gmail.com> (http://SuperOl3g.github.io)",
   "license": "ISC",
   "dependencies": {
+    "bluebird": "3.5.0",
     "filesize": "3.5.6",
     "lodash": "4.17.4"
   },
