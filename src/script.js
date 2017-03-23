@@ -1,4 +1,4 @@
-import { filesize } from 'filesize';
+import filesize from 'filesize';
 import { throttle } from 'underscore';
 import { Promise } from 'bluebird';
 
