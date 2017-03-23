@@ -1,12 +1,12 @@
 {
     "manifest_version": 2,
     "name": "PRImageInfo",
-    "description": "Add information about image size, width, height to bitbucket Pull Request pages.",
-    "version": "0.1",
+    "description": "Add information about image size, width, height to Bitbucket Pull Request pages.",
+    "version": "0.1.0",
     "content_scripts": [
         {
             "matches": [
-                "https://stash.tcsbank.ru/*"
+                "<all_urls>"
             ],
             "js": [
                 "bundle.js"
