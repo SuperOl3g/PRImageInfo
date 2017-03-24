@@ -19,27 +19,21 @@ let getImageSize = imgPath => new Promise((resolve,reject) => {
     xhr.send(null);
 });
 
-let addImgInfo = () => {
-    let imgBlocks = document.querySelectorAll('.binary-container .binary');
-    for (let imgBlock of imgBlocks) {
-        let imgElem = imgBlock.querySelector('img');
+let addImgInfo = imgElem => {
+    getImageSize(imgElem.src)
+        .then(imgSize => {
+            let imgBlock = imgElem.closest('.binary-container .binary');
+            let insertionPointElem = imgBlock.querySelector('h5');
+            let sizeElem = insertionPointElem.querySelector(`.${SIZE_ELEM_CLASSNAME}`);
 
-        if (!imgElem) continue;
+            if(!sizeElem) {
+                sizeElem = document.createElement('span');
+                sizeElem.className = SIZE_ELEM_CLASSNAME;
+                insertionPointElem.appendChild(sizeElem);
+            }
 
-        getImageSize(imgElem.src)
-            .then (imgSize => {
-                let insertionPointElem = imgBlock.querySelector('h5');
-                let sizeElem = insertionPointElem.querySelector(`.${SIZE_ELEM_CLASSNAME}`);
-
-                if(!sizeElem) {
-                    sizeElem = document.createElement('span');
-                    sizeElem.className = SIZE_ELEM_CLASSNAME;
-                    insertionPointElem.appendChild(sizeElem);
-                }
-
-                sizeElem.innerText = ` (${imgElem.naturalWidth}x${imgElem.naturalHeight}, ${filesize(imgSize)})`;
-            });
-    }
+            sizeElem.innerText = ` (${imgElem.naturalWidth}x${imgElem.naturalHeight}, ${filesize(imgSize)})`;
+        });
 };
 
 let throttledAddImgInfo = throttle(addImgInfo, 200);
@@ -50,7 +44,7 @@ let isBucket = applicationName && applicationName.content === "Bitbucket";
 if (isBucket) {
     document.addEventListener(
         'load', event => {
-            if (event.target.tagName == 'IMG')
-                throttledAddImgInfo();
+            if (event.target.tagName == 'IMG' && event.target.closest('.binary'))
+                throttledAddImgInfo(event.target);
         }, true);
 }
