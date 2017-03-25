@@ -1,5 +1,4 @@
 import filesize from 'filesize';
-import { throttle, random } from 'underscore';
 import { Promise } from 'bluebird';
 
 import s from './styles.scss';
@@ -80,8 +79,6 @@ const addImgInfo = imgElem => {
         });
 };
 
-const throttledAddImgInfo = throttle(addImgInfo, 200);
-
 const applicationName = document.querySelector("meta[name=\'application-name\']");
 const isBucket = applicationName && applicationName.content === "Bitbucket";
 
@@ -89,6 +86,6 @@ if (isBucket) {
     document.addEventListener(
         'load', event => {
             if (event.target.tagName == 'IMG' && event.target.closest('.binary'))
-                throttledAddImgInfo(event.target);
+                addImgInfo(event.target);
         }, true);
 }
