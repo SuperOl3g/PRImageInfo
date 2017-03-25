@@ -1,5 +1,4 @@
 import filesize from 'filesize';
-import { Promise } from 'bluebird';
 
 import s from './styles.scss';
 

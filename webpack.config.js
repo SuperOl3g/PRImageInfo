@@ -40,7 +40,7 @@ module.exports = {
                         options: {
                             minimize: isProduction,
                             modules: true,
-                            importLoaders: 1,
+                            importLoaders: 2,
                             localIdentName: isProduction ? '[hash:base64:5]' : '[name]__[local]___[hash:base64:5]'
                         }
                     }, {
@@ -48,8 +48,7 @@ module.exports = {
                         options: {
                             browsers: 'last 2 version'
                         }
-                    },
-                    {
+                    }, {
                         loader: 'sass-loader'
                     }
                 ]
@@ -61,6 +60,9 @@ module.exports = {
             { from: './manifest.json', to: distDir },
             { from: './_locales/**', to: distDir }
         ]),
+        new webpack.ProvidePlugin({
+            Promise: 'bluebird'
+        }),
         ...optionalPlugins
     ]
 };
