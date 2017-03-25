@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-const srcDir = `${__dirname}/src`;
 const distDir = `${__dirname}/dist`;
 
 const isProduction = process.env.NODE_ENV == 'production' || process.argv.indexOf('-p') !== -1;
@@ -13,7 +12,8 @@ if (isProduction) {
 }
 
 module.exports = {
-    entry: `${srcDir}/script.js`,
+    context: `${__dirname}/src`,
+    entry: './script.js',
     output: {
         path: distDir,
         filename: 'bundle.js'
@@ -57,7 +57,10 @@ module.exports = {
         ]
     },
     plugins: [
-        new CopyWebpackPlugin([{ from: `${srcDir}/manifest.json`, to: distDir }]),
+        new CopyWebpackPlugin([
+            { from: './manifest.json', to: distDir },
+            { from: './_locales/**', to: distDir }
+        ]),
         ...optionalPlugins
     ]
 };

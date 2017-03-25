@@ -26,32 +26,21 @@ const getOptStatus = size => {
 };
 
 const getTooltipHTML = status => {
-    const states = {
-        [OPT_STATUS.LOADING]: {
-            icon: `<div class='${s.loading}'>
+    const icons = {
+        [OPT_STATUS.LOADING]:
+            `<div class='${s.loading}'>
                 <div class='${s.loading__dot}'></div>
             </div>`,
-            texts: ['Loading']
-        },
-        [OPT_STATUS.OPTIMIZED] : {
-            icon: '\u2705',
-            texts: ['Optimized']
-        },
-        [OPT_STATUS.UNDEFINED] : {
-            icon: '\u2754',
-            texts: ['Hmm...We don\'t know']
-        } ,
-        [OPT_STATUS.UNOPTIMIZED] : {
-            icon: '\u26A0',
-            texts: ['Not optimized']
-        },
+        [OPT_STATUS.OPTIMIZED] : '\u2705',
+        [OPT_STATUS.UNDEFINED] : '\u2754',
+        [OPT_STATUS.UNOPTIMIZED] : '\u26A0'
     };
 
-    const text = states[status].texts[random(states[status].texts.length - 1)];
+    const text = chrome.i18n.getMessage(`tooltip_${status}`);
 
     return `<div class='${s.tooltip}'>
             <div class='${s.tooltip__content}'>
-                ${states[status].icon}️
+                ${icons[status]}️
             </div>
             <div class='${s.tooltip__popup}'>${text}</div>
         </div>`;

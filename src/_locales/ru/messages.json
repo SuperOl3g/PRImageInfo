@@ -1,0 +1,14 @@
+{
+    "tooltip_loading": {
+        "message": "Загрузка"
+    },
+    "tooltip_optimized": {
+        "message": "Оптимизировано"
+    },
+    "tooltip_undefined": {
+        "message": "Хмм... Мы не уверены"
+    },
+    "tooltip_unoptimized": {
+        "message": "Не оптимизировано"
+    }
+}

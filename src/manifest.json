@@ -2,6 +2,7 @@
     "manifest_version": 2,
     "name": "PRImageInfo",
     "description": "Add information about image size, width, height to Bitbucket Pull Request pages.",
+    "default_locale": "en",
     "version": "0.1.0",
     "content_scripts": [
         {
