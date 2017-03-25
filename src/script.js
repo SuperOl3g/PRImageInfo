@@ -1,10 +1,63 @@
 import filesize from 'filesize';
-import { throttle } from 'underscore';
+import { throttle, random } from 'underscore';
 import { Promise } from 'bluebird';
+
+import s from './styles.scss';
 
 const SIZE_ELEM_CLASSNAME = 'snippet__pic-size';
 
-let getImageSize = imgPath => new Promise((resolve,reject) => {
+const SIZE_LIMIT = {
+    UNOPTIMIZED: 1024 * 1024
+};
+
+const OPT_STATUS = {
+    LOADING: 'loading',
+    OPTIMIZED: 'optimized',
+    UNDEFINED: 'undefined',
+    UNOPTIMIZED: 'unoptimized'
+};
+
+const getOptStatus = size => {
+    if (size > SIZE_LIMIT.UNOPTIMIZED) {
+        return OPT_STATUS.UNOPTIMIZED;
+    }
+
+    return OPT_STATUS.UNDEFINED;
+};
+
+const getTooltipHTML = status => {
+    const states = {
+        [OPT_STATUS.LOADING]: {
+            icon: `<div class='${s.loading}'>
+                <div class='${s.loading__dot}'></div>
+            </div>`,
+            texts: ['Loading']
+        },
+        [OPT_STATUS.OPTIMIZED] : {
+            icon: '\u2705',
+            texts: ['Optimized']
+        },
+        [OPT_STATUS.UNDEFINED] : {
+            icon: '\u2754',
+            texts: ['Hmm...We don\'t know']
+        } ,
+        [OPT_STATUS.UNOPTIMIZED] : {
+            icon: '\u26A0',
+            texts: ['Not optimized']
+        },
+    };
+
+    const text = states[status].texts[random(states[status].texts.length - 1)];
+
+    return `<div class='${s.tooltip}'>
+            <div class='${s.tooltip__content}'>
+                ${states[status].icon}️
+            </div>
+            <div class='${s.tooltip__popup}'>${text}</div>
+        </div>`;
+};
+
+const getImgSize = imgPath => new Promise((resolve,reject) => {
     var xhr = new XMLHttpRequest();
     xhr.open('HEAD', imgPath, true);
     xhr.onreadystatechange = () => {
@@ -19,11 +72,11 @@ let getImageSize = imgPath => new Promise((resolve,reject) => {
     xhr.send(null);
 });
 
-let addImgInfo = imgElem => {
-    getImageSize(imgElem.src)
+const addImgInfo = imgElem => {
+    getImgSize(imgElem.src)
         .then(imgSize => {
-            let imgBlock = imgElem.closest('.binary-container .binary');
-            let insertionPointElem = imgBlock.querySelector('h5');
+            const imgBlock = imgElem.closest('.binary');
+            const insertionPointElem = imgBlock.querySelector('h5');
             let sizeElem = insertionPointElem.querySelector(`.${SIZE_ELEM_CLASSNAME}`);
 
             if(!sizeElem) {
@@ -32,14 +85,16 @@ let addImgInfo = imgElem => {
                 insertionPointElem.appendChild(sizeElem);
             }
 
-            sizeElem.innerText = ` (${imgElem.naturalWidth}x${imgElem.naturalHeight}, ${filesize(imgSize)})`;
+            const optStatus = getOptStatus(imgSize);
+
+            sizeElem.innerHTML = ` (${imgElem.naturalWidth}x${imgElem.naturalHeight}, ${filesize(imgSize)})${getTooltipHTML(optStatus)}`;
         });
 };
 
-let throttledAddImgInfo = throttle(addImgInfo, 200);
+const throttledAddImgInfo = throttle(addImgInfo, 200);
 
-let applicationName = document.querySelector("meta[name=\'application-name\']");
-let isBucket = applicationName && applicationName.content === "Bitbucket";
+const applicationName = document.querySelector("meta[name=\'application-name\']");
+const isBucket = applicationName && applicationName.content === "Bitbucket";
 
 if (isBucket) {
     document.addEventListener(
