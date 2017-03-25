@@ -6,14 +6,15 @@ import s from './styles.scss';
 const SIZE_ELEM_CLASSNAME = 'snippet__pic-size';
 
 const SIZE_LIMIT = {
-    UNOPTIMIZED: 1024 * 1024
+    UNOPTIMIZED: 600 * 1024
 };
 
 const OPT_STATUS = {
     LOADING: 'loading',
     OPTIMIZED: 'optimized',
-    UNDEFINED: 'undefined',
-    UNOPTIMIZED: 'unoptimized'
+    UNKNOWN: 'unknown',
+    UNOPTIMIZED: 'unoptimized',
+    NOTCHECKED: 'notchecked'
 };
 
 const getOptStatus = size => {
@@ -21,17 +22,21 @@ const getOptStatus = size => {
         return OPT_STATUS.UNOPTIMIZED;
     }
 
-    return OPT_STATUS.UNDEFINED;
+    return OPT_STATUS.NOTCHECKED;
 };
 
 const getTooltipHTML = status => {
+    if (status === OPT_STATUS.NOTCHECKED) {
+        return '';
+    }
+
     const icons = {
         [OPT_STATUS.LOADING]:
             `<div class='${s.loading}'>
                 <div class='${s.loading__dot}'></div>
             </div>`,
         [OPT_STATUS.OPTIMIZED] : '\u2705',
-        [OPT_STATUS.UNDEFINED] : '\u2754',
+        [OPT_STATUS.UNKNOWN] : '\u2754',
         [OPT_STATUS.UNOPTIMIZED] : '\u26A0'
     };
 
@@ -49,8 +54,8 @@ const getImgSize = imgPath => new Promise((resolve,reject) => {
     var xhr = new XMLHttpRequest();
     xhr.open('HEAD', imgPath, true);
     xhr.onreadystatechange = () => {
-        if ( xhr.readyState == 4 ) {
-            if ( xhr.status == 200 ) {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
                 resolve(xhr.getResponseHeader('Content-Length'));
             } else {
                 reject('Request error');
@@ -67,7 +72,7 @@ const addImgInfo = imgElem => {
             const insertionPointElem = imgBlock.querySelector('h5');
             let sizeElem = insertionPointElem.querySelector(`.${SIZE_ELEM_CLASSNAME}`);
 
-            if(!sizeElem) {
+            if (!sizeElem) {
                 sizeElem = document.createElement('span');
                 sizeElem.className = SIZE_ELEM_CLASSNAME;
                 insertionPointElem.appendChild(sizeElem);

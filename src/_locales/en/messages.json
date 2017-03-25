@@ -5,7 +5,7 @@
     "tooltip_optimized": {
         "message": "Optimized"
     },
-    "tooltip_undefined": {
+    "tooltip_unknown": {
         "message": "Hmm...We aren't sure"
     },
     "tooltip_unoptimized": {

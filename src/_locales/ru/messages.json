@@ -5,7 +5,7 @@
     "tooltip_optimized": {
         "message": "Оптимизировано"
     },
-    "tooltip_undefined": {
+    "tooltip_unknown": {
         "message": "Хмм... Мы не уверены"
     },
     "tooltip_unoptimized": {
