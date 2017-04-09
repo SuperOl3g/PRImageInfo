@@ -60,9 +60,6 @@ module.exports = {
             { from: './manifest.json', to: distDir },
             { from: './_locales/**', to: distDir }
         ]),
-        new webpack.ProvidePlugin({
-            Promise: 'bluebird'
-        }),
         ...optionalPlugins
     ]
 };
